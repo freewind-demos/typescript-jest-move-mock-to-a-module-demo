@@ -2,14 +2,14 @@ import asMock from "./asMock";
 import decorate from './decorate';
 import hello from "./hello";
 
-// Note: we just return a `jest.fn()` for the default exported function,
-// not `{ default: jest.fn() }`
-jest.mock('./decorate', () => jest.fn())
+// Wrong: jest.mock('./decorate', () => { default: jest.fn() })
+// Correct: jest.mock('./decorate', () => jest.fn())
+jest.mock('./decorate');
 
 describe('mock test', () => {
   const mockDecorate = asMock(decorate);
 
-  beforeEach(mockDecorate.mockClear);
+  beforeEach(() => mockDecorate.mockClear());
 
   it('test1', () => {
     mockDecorate.mockImplementation((s) => `[${s}]`)

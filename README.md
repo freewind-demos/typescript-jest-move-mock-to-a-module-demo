@@ -15,6 +15,12 @@ export default function foo() {}
 jest.mock('./foo', () => jest.fn())
 ```
 
+或者什么都不给，直接简单：
+
+```
+jest.mock('./foo');
+```
+
 而不是我本来以为的：
 
 ```
