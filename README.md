@@ -1,35 +1,21 @@
-TypeScript Jest Mock Module with Exported Default Function Demo
+TypeScript Jest Move Mock to a Module Demo
 =========================================================
 
-如果一个module定义类似于：
+当我们在jest中想mock一个module时，通常使用以下调用：
 
 ```
-export default function foo() {}
+jest.mock('./foo')
 ```
 
-在jest中怎么来mock这个函数？
+需要注意的是，它应该写在每个测试文件中，而不应该抽取到某一个文件做集中处理。
 
-经过测试，应该是:
+原因是jest对于它有特别的处理。在一个测试文件中，jest在最外层看到这个调用，会把它自动移到文件的开始，以便在相应的module被其它代码导入之前运行，
+才能让mock生效。
 
-```
-jest.mock('./foo', () => jest.fn())
-```
+有时候我们了为方便与复用，可能会想把它与相应的其它代码抽到另一个文件中，然后在不同的测试文件中调用。
+这种情况下jest自动提前的功能就失效了，必须依赖于我们手动调节importing的顺序，还可能有各种奇怪问题发生。
 
-或者什么都不给，直接简单：
-
-```
-jest.mock('./foo');
-```
-
-而不是我本来以为的：
-
-```
-jest.mock('./foo', () => ({
-  default: jest.fn()
-}))
-```
-
-再结合一个自定义的强转函数`asMock`，可以让我们得到一个强类型的mock，方便后面操作。
+所以我们不应该使用这种办法，而是使用标准做法：在每个测试文件中，在最外层显式调用`jest.mock`
 
 ```
 npm install
